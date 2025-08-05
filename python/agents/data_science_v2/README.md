@@ -37,14 +37,14 @@ These questions require the agent to query only tables within the `thelook_ecomm
 
 These questions focus on the newly created `customer_profiles` dataset, testing the agent's ability to query it independently.
 **Demographic Insights:**
-`"How many customers are in each age_group?"
-`"What is the distribution of household_income among our customers?"
-`"List all customers who live in the 'South' region."
+``"How many customers are in each age_group?"`
+`"What is the distribution of household_income among our customers?"`
+`"List all customers who live in the 'South' region."`
 **Survey and Feedback Analysis:**
-`"What is the average satisfaction_score from all survey responses?"
-`"Show me all the feedback text from surveys with a satisfaction_score of 1."
-`"Count the number of survey responses for each purchase_intent category ('High', 'Medium', 'Low')."
-`"Find the id of the user with the most recent survey submission."
+`"What is the average satisfaction_score from all survey responses?"`
+`"Show me all the feedback text from surveys with a satisfaction_score of 1."`
+`"Count the number of survey responses for each purchase_intent category ('High', 'Medium', 'Low')."`
+`"Find the id of the user with the most recent survey submission."`
 
 ## 2. Questions for Joins 🤝
 

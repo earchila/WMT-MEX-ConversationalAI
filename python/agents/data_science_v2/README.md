@@ -22,29 +22,36 @@ The key features of this agent are:
 
 These questions require the agent to query only tables within the `thelook_ecommerce` public dataset. They are great for testing basic SQL functionality like `SELECT, WHERE, GROUP BY, and COUNT`.
 * **Order and Product Analysis:**
+```bash
 `"How many distinct products were sold in the last 30 days?"`
 `"What is the total revenue for each product category?"`
 `"List the top 10 most expensive products."`
 `"Find all orders that were shipped to 'New York'."`
 `"What is the average sale price of a t-shirt?"`
+```
 * **User and Traffic Analysis:**
+```bash
 `"How many new users signed up in January 2024?"`
 `"Which distribution center has the most items shipped from it?"`
 `"What is the total number of unique visitors to the website in the last week?"`
 `"Show the total number of orders placed by each customer."`
-
+```
 ## From customer_profiles dataset
 
 These questions focus on the newly created `customer_profiles` dataset, testing the agent's ability to query it independently.
 **Demographic Insights:**
+```bash
 ``"How many customers are in each age_group?"`
 `"What is the distribution of household_income among our customers?"`
 `"List all customers who live in the 'South' region."`
+```
 **Survey and Feedback Analysis:**
+```bash
 `"What is the average satisfaction_score from all survey responses?"`
 `"Show me all the feedback text from surveys with a satisfaction_score of 1."`
 `"Count the number of survey responses for each purchase_intent category ('High', 'Medium', 'Low')."`
 `"Find the id of the user with the most recent survey submission."`
+```
 
 ## 2. Questions for Joins 🤝
 

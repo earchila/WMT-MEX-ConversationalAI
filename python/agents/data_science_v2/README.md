@@ -78,15 +78,15 @@ Predicting High-Value Customers:
 We use the **"thelook_ecommerce"** BigQuery public dataset.
 
 It's a popular, publicly available dataset that's great for learning and practicing SQL, especially for e-commerce analytics. Here are some key things to know about it:
-    * **Fictitious Data:** The dataset contains synthetic (not real) data for a fictional clothing e-commerce site created by the Looker team. This makes it a safe and privacy-preserving resource for analysis.
-    * **Publicly Hosted on BigQuery:** Because it's a public dataset hosted on Google BigQuery, you can access and query it for free (within the free tier of BigQuery). This makes it an excellent resource for anyone with a Google Cloud account to get hands-on experience with BigQuery.
-    * **Comprehensive Information:** It includes several tables with information on various aspects of an e-commerce business, such as:
-        * Customers
-        * Products
-        * Orders and Order Items
-        * Web events
-        * Digital marketing campaigns
-        * Logistics and distribution centers
+* **Fictitious Data:** The dataset contains synthetic (not real) data for a fictional clothing e-commerce site created by the Looker team. This makes it a safe and privacy-preserving resource for analysis.
+* **Publicly Hosted on BigQuery:** Because it's a public dataset hosted on Google BigQuery, you can access and query it for free (within the free tier of BigQuery). This makes it an excellent resource for anyone with a Google Cloud account to get hands-on experience with BigQuery.
+* **Comprehensive Information:** It includes several tables with information on various aspects of an e-commerce business, such as:
+    * Customers
+    * Products
+    * Orders and Order Items
+    * Web events
+    * Digital marketing campaigns
+    * Logistics and distribution centers
 
 We also use a **customer demographics** and survey data dataset, to test your data science agent's capabilities, requiring the agent to perform joins, comparisons, and contextual inference across both.
 

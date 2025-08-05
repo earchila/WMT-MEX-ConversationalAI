@@ -39,7 +39,7 @@ Follow these steps to set up and run the sample agents:
 
     To start working with the ADK Python samples, first clone the public `adk-samples` repository:
     ```bash
-    git clone https://github.com/google/adk-samples.git
+    git clone https://github.com/earchila/adk.git
     cd adk-samples/python
     ```
 

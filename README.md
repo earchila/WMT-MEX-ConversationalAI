@@ -13,41 +13,14 @@ To learn more, check out the [ADK Documentation](https://google.github.io/adk-do
 
 ## 🌳 Repository Structure
 ```bash
-├── java
-│   ├── agents
-│   │   ├── software-bug-assistant
-│   │   └── time-series-forecasting
-│   └── README.md
 ├── python
 │   ├── agents
-│   │   ├── academic-research
-│   │   ├── brand-search-optimization
-│   │   ├── camel
-│   │   ├── customer-service
+│   │   ├── data_science_v2
 │   │   ├── data-science
-│   │   ├── financial-advisor
-│   │   ├── fomc-research
-│   │   ├── gemini-fullstack
-│   │   ├── image-scoring
-│   │   ├── llm-auditor
-│   │   ├── machine-learning-engineering
-│   │   ├── marketing-agency
-│   │   ├── personalized-shopping
-│   │   ├── RAG
-│   │   ├── README.md
-│   │   ├── software-bug-assistant  
-│   │   └── travel-concierge
+
 │   └── README.md
 └── README.md
 ```
-
-## ℹ️ Getting help
-
-If you have any questions or if you found any problems with this repository, please report through [GitHub issues](https://github.com/google/adk-samples/issues).
-
-## 🤝 Contributing
-
-We welcome contributions from the community! Whether it's bug reports, feature requests, documentation improvements, or code contributions, please see our [**Contributing Guidelines**](https://github.com/google/adk-samples/blob/main/CONTRIBUTING.md) to get started.
 
 ## 📄 License
 

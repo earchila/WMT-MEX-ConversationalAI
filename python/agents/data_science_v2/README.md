@@ -20,59 +20,59 @@ The key features of this agent are:
 ## 1. Single Data Set questions
 ## From thelook_ecommerce dataset
 
-These questions require the agent to query only tables within the thelook_ecommerce public dataset. They are great for testing basic SQL functionality like SELECT, WHERE, GROUP BY, and COUNT.
-Order and Product Analysis:
-"How many distinct products were sold in the last 30 days?"
-"What is the total revenue for each product category?"
-"List the top 10 most expensive products."
-"Find all orders that were shipped to 'New York'."
-"What is the average sale price of a t-shirt?"
-User and Traffic Analysis:
-"How many new users signed up in January 2024?"
-"Which distribution center has the most items shipped from it?"
-"What is the total number of unique visitors to the website in the last week?"
-"Show the total number of orders placed by each customer."
+These questions require the agent to query only tables within the `thelook_ecommerce` public dataset. They are great for testing basic SQL functionality like `SELECT, WHERE, GROUP BY, and COUNT`.
+* **Order and Product Analysis:**
+`"How many distinct products were sold in the last 30 days?"`
+`"What is the total revenue for each product category?"`
+`"List the top 10 most expensive products."`
+`"Find all orders that were shipped to 'New York'."`
+`"What is the average sale price of a t-shirt?"`
+* **User and Traffic Analysis:**
+`"How many new users signed up in January 2024?"`
+`"Which distribution center has the most items shipped from it?"`
+`"What is the total number of unique visitors to the website in the last week?"`
+`"Show the total number of orders placed by each customer."`
 
 ## From customer_profiles dataset
 
-These questions focus on the newly created customer_profiles dataset, testing the agent's ability to query it independently.
-Demographic Insights:
-"How many customers are in each age_group?"
-"What is the distribution of household_income among our customers?"
-"List all customers who live in the 'South' region."
-Survey and Feedback Analysis:
-"What is the average satisfaction_score from all survey responses?"
-"Show me all the feedback text from surveys with a satisfaction_score of 1."
-"Count the number of survey responses for each purchase_intent category ('High', 'Medium', 'Low')."
-"Find the id of the user with the most recent survey submission."
+These questions focus on the newly created `customer_profiles` dataset, testing the agent's ability to query it independently.
+**Demographic Insights:**
+`"How many customers are in each age_group?"
+`"What is the distribution of household_income among our customers?"
+`"List all customers who live in the 'South' region."
+**Survey and Feedback Analysis:**
+`"What is the average satisfaction_score from all survey responses?"
+`"Show me all the feedback text from surveys with a satisfaction_score of 1."
+`"Count the number of survey responses for each purchase_intent category ('High', 'Medium', 'Low')."
+`"Find the id of the user with the most recent survey submission."
 
 ## 2. Questions for Joins 🤝
 
-These questions require the agent to explicitly join data from thelook_ecommerce and customer_profiles on a common key (id) to answer direct business questions.
-Customer Demographics & Order Value: "What is the average order value for customers in the 'Midwest' region, and how does it compare to the 'Northeast'?"
-Product Performance & Gender: "Show me the top 5 most purchased products by customers who identify as 'Female'."
-Satisfaction & Purchase History: "Create a table showing the average number of orders and average total spend for each satisfaction_score (1-5) based on customer survey data."
-Age Group & Refund Rate: "Calculate the refund rate (number of refunded items / total items sold) for the '18-25' age group. How does this compare to the 56+ age group?"
-Income & Discount Usage: "What percentage of orders used a discount for customers in the '$100k+' household income bracket?"
+These questions require the agent to explicitly join data from `thelook_ecommerce` and `customer_profiles` on a common key (`id`) to answer direct business questions.
+* Customer Demographics & Order Value: `"What is the average order value for customers in the 'Midwest' region, and how does it compare to the 'Northeast'?"`
+* Product Performance & Gender: `"Show me the top 5 most purchased products by customers who identify as 'Female'."`
+* Satisfaction & Purchase History: `"Create a table showing the average number of orders and average total spend for each satisfaction_score (1-5) based on customer survey data."`
+* Age Group & Refund Rate: `"Calculate the refund rate (number of refunded items / total items sold) for the '18-25' age group. How does this compare to the 56+ age group?"`
+* Income & Discount Usage: `"What percentage of orders used a discount for customers in the '$100k+' household income bracket?"`
 
 ## 3. Questions for Contextual Inference 🤔
 
 These questions are more open-ended and require the agent to first infer which dataset contains the necessary information before formulating a multi-table query.
-Popularity by Demographics: "Which clothing category is most popular among customers with a household_income of '$50k - $100k'?"
-Geographic Shopping Habits: "Do customers in the 'West' region tend to buy more clothing for 'men' or for 'women'?"
-Feedback & Product Type: "Analyze customer feedback for orders of 'Activewear'. What is the average satisfaction_score for this product category?"
-Purchase Intent & Recency: "Identify the top 10 customers who gave a 'High' purchase_intent score in their last survey but haven't placed an order in the last 60 days."
-Correlation Analysis: "Is there a correlation between a customer's satisfaction_score and their total number of purchases?"
+* Popularity by Demographics: `"Which clothing category is most popular among customers with a household_income of '$50k - $100k'?"`
+* Geographic Shopping Habits: `"Do customers in the 'West' region tend to buy more clothing for 'men' or for 'women'?"`
+* Feedback & Product Type: `"Analyze customer feedback for orders of 'Activewear'. What is the average satisfaction_score for this product category?"`
+* Purchase Intent & Recency: `"Identify the top 10 customers who gave a 'High' purchase_intent score in their last survey but haven't placed an order in the last 60 days."`
+* Correlation Analysis: `"Is there a correlation between a customer's satisfaction_score and their total number of purchases?"`
 
 ## 3. Questions for BQML Prediction 🤖
 
-These questions test the agent's ability to combine data from both datasets to train and analyze machine learning models using BigQuery ML (BQML).
-Predicting Customer Lifetime Value (CLV):
-"Using the transaction data from thelook_ecommerce and the demographic data from customer_profiles, train a BigQuery ML model to predict a customer's lifetime value. What are the most important features that influence the prediction?"
-Churn Prediction:
-"Can you build a model to predict customer churn? Use customer survey data (customer_profiles.survey_responses) and purchase frequency from thelook_ecommerce to train a BQML model. Identify which factors are most predictive of a customer leaving."
-Predicting High-Value Customers:
-"Using a boosted tree classifier, predict which customers are likely to become 'high-value' customers (top 20% by total spend). Combine purchasing history with their household income and region to create the training data."
+These questions test the agent's ability to combine data from both datasets to train and analyze machine learning models using **BigQuery ML** `(BQML`).
+* Predicting Customer Lifetime Value (CLV):
+`"Using the transaction data from thelook_ecommerce and the demographic data from customer_profiles, train a BigQuery ML model to predict a customer's lifetime value. What are the most important features that influence the prediction?"`
+* Churn Prediction:
+`"Can you build a model to predict customer churn? Use customer survey data (customer_profiles.survey_responses) and purchase frequency from thelook_ecommerce to train a BQML model. Identify which factors are most predictive of a customer leaving."`
+* Predicting High-Value Customers:
+`"Using a boosted tree classifier, predict which customers are likely to become 'high-value' customers (top 20% by total spend). Combine purchasing history with their household income and region to create the training data."`
 
 ## Data Sets
 We use the **"thelook_ecommerce"** BigQuery public dataset.

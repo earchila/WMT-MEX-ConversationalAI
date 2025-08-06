@@ -7,6 +7,8 @@ license = "Apache License 2.0"
 readme = "README.md"
 package-mode = true
 
+packages = [{ include = "product_retail", from = "." }]
+
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -26,6 +28,7 @@ pydantic = "^2.11.3"
 pandas = "^2.3.0"
 numpy = "^2.3.1"
 milvus-lite = "^2.4.9"
+pymilvus = "^2.4.9"
 
 [tool.poetry.group.dev.dependencies]
 google-cloud-aiplatform = { extras = [
@@ -55,6 +58,9 @@ filterwarnings = [
     #'ignore:function ham\(\) is deprecated:DeprecationWarning',
 ]
 
+
+[tool.poetry.scripts]
+product-retail-agent = "product_retail.agent:root_agent"
 
 [build-system]
 requires = ["poetry-core"]

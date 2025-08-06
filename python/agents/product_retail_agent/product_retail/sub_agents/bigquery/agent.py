@@ -15,7 +15,6 @@
 """Database Agent: get data from database (BigQuery) using NL2SQL."""
 
 import os
-
 from google.adk.agents import Agent
 from google.adk.agents.callback_context import CallbackContext
 from google.genai import types

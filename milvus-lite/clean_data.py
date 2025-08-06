@@ -11,7 +11,8 @@ def create_and_populate_milvus_db(db_path: str, schema_json_path: str, data_json
         schema_json_path (str): The path to the JSON file containing the collection schema.
         data_json_path (str): The path to the JSON file containing the data to populate.
     """
-    # Read schema from JSON file
+    # OPTIONAL DEBUG LINE: Uncomment the line below to see the path it's trying to open
+    # print(f"Attempting to open schema file at: {schema_json_path}") 
     with open(schema_json_path, 'r') as f:
         schema_data = json.load(f)
 
@@ -78,7 +79,6 @@ def create_and_populate_milvus_db(db_path: str, schema_json_path: str, data_json
             new_entity['product_number'] = int(new_entity['product_number'])
         
         # Remove vector_sparse if it exists in the data, as it's no longer in the schema
-        # This will prevent type mismatch errors during insertion
         if 'vector_sparse' in new_entity:
             del new_entity['vector_sparse']
 
@@ -93,14 +93,9 @@ def create_and_populate_milvus_db(db_path: str, schema_json_path: str, data_json
 
 if __name__ == "__main__":
     db_path = "./milvus_db.db"
-    # Change these paths:
-    schema_json_path = "milvus_schema.json"  # Removed "milvus-lite/"
-    data_json_path = "milvus_data.json"      # Removed "milvus-lite/"
-
+    # IMPORTANT: These paths are relative to the directory from which you run the script.
+    # Since you are in 'milvus-lite' directory, these should be just the filenames.
+    schema_json_path = "milvus_schema.json"
+    data_json_path = "milvus_data.json"
 
     create_and_populate_milvus_db(db_path, schema_json_path, data_json_path)
-
-    # You can now interact with the created Milvus Lite database
-    # client = MilvusClient(db_path)
-    # print(client.query(collection_name="walmart_products_hybrid", filter="", output_fields=["id", "product_number", "text", "vector_dense"]))
-    # client.close()

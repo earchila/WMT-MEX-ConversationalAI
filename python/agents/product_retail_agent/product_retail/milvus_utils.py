@@ -71,7 +71,6 @@ class MilvusProductDB:
         search_params = {
             "data": [query_embedding],
             "anns_field": "embedding",
-            "param": {}, # No specific parameters for FLAT index
             "limit": top_k,
             "output_fields": ["product_name", "description"]
         }

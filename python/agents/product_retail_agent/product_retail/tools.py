@@ -23,7 +23,7 @@ from google.adk.tools.agent_tool import AgentTool
 
 from .sub_agents import ds_agent, db_agent
 from .milvus_utils import MilvusProductDB
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 
 async def call_db_agent(
@@ -79,41 +79,66 @@ async def call_ds_agent(
 
 
 async def find_substitute_product(
-    product_name: str,
     tool_context: ToolContext,
+    product_name: Optional[str] = None,
+    product_id: Optional[int] = None,
 ):
     """
     Tool to find substitute products using Milvus Lite.
     Args:
-        product_name: The name of the product for which to find substitutes.
         tool_context: The tool context containing necessary state.
+        product_name: The name of the product for which to find substitutes (optional).
+        product_id: The ID of the product for which to find substitutes (optional).
     Returns:
         A list of dictionaries, each representing a substitute product with its details.
     """
-    # In a real scenario, you would generate an embedding for the product_name
-    # using an embedding model (e.g., from Vertex AI, Sentence Transformers).
-    # For this example, we'll use a dummy embedding.
-    
-    # Placeholder for embedding generation
-    # You would replace this with actual model inference
     import numpy as np
-    def generate_embedding_for_product(name: str) -> List[float]:
-        # This is a dummy function. In a real application, you'd use an LLM
-        # or a dedicated embedding model to generate a meaningful embedding.
-        # For example:
-        # from vertexai.language_models import TextEmbeddingModel
-        # model = TextEmbeddingModel.from_pretrained("textembedding-gecko@001")
-        # embeddings = model.get_embeddings([name])
-        # return embeddings[0].values
-        return np.random.rand(768).tolist() # Dummy 768-dim embedding
-
-    query_embedding = generate_embedding_for_product(product_name)
-
-    # Initialize MilvusProductDB (consider making this a singleton or passing it)
-    # For simplicity, we'll initialize it here. In a production system,
-    # you might manage the MilvusProductDB instance more carefully.
+    
     milvus_db_path = tool_context.state.get("milvus_db_path")
     milvus_db = MilvusProductDB(db_path=milvus_db_path)
+    
+    query_embedding = None
+    product_identifier = None
+
+    if product_id is not None:
+        # Retrieve product by ID from Milvus to get its embedding
+        # MilvusClient.query can be used to retrieve entities by ID
+        # Note: This assumes 'id' is indexed and searchable.
+        try:
+            # Fetch the product by ID
+            res = milvus_db.client.query(
+                collection_name=milvus_db.collection_name,
+                filter=f"id == {product_id}", # Use 'filter' instead of 'expr' for newer PyMilvus versions
+                output_fields=["product_name", "embedding"]
+            )
+            if res:
+                # Assuming ID is unique, take the first result
+                product_data = res[0]
+                query_embedding = product_data.get("embedding")
+                product_identifier = product_data.get("product_name", f"ID: {product_id}")
+            else:
+                milvus_db.close()
+                return [{"message": f"Product with ID {product_id} not found."}]
+        except Exception as e:
+            milvus_db.close()
+            return [{"error": f"Error retrieving product by ID: {e}"}]
+
+    elif product_name is not None:
+        # Placeholder for embedding generation
+        # In a real application, you'd use an LLM or a dedicated embedding model
+        # to generate a meaningful embedding for the product name.
+        def generate_embedding_for_product(name: str) -> list[float]:
+            return np.random.rand(768).tolist() # Dummy 768-dim embedding
+        
+        query_embedding = generate_embedding_for_product(product_name)
+        product_identifier = product_name
+    else:
+        milvus_db.close()
+        return [{"message": "Please provide either a product name or a product ID."}]
+
+    if query_embedding is None:
+        milvus_db.close()
+        return [{"message": f"Could not generate or retrieve embedding for {product_identifier}."}]
 
     substitutes = milvus_db.search_substitute_products(query_embedding, top_k=5)
     milvus_db.close() # Close the connection after use
@@ -121,4 +146,4 @@ async def find_substitute_product(
     if substitutes:
         return substitutes
     else:
-        return [{"message": f"No substitute products found for {product_name}."}]
+        return [{"message": f"No substitute products found for {product_identifier}."}]

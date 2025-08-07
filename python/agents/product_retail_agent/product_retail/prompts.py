@@ -46,7 +46,7 @@ def return_instructions_root() -> str:
 
         # 4a. **BigQuery ML Tool (`call_bqml_agent` - if applicable):**  If the user specifically asks (!) for BigQuery ML, use this tool. Make sure to provide a proper query to it to fulfill the task, along with the dataset and project ID, and context.
 
-        # 4b. **Product Substitute Tool (`find_substitute_product` - if applicable):** If the user asks for substitute products, use this tool.
+        # 4b. **Product Substitute Tool (`find_substitute_product` - if applicable):** If the user asks for substitute products, use this tool. It can accept either a product name or a product ID.
 
         # 5. **Respond:** Return `RESULT` AND `EXPLANATION`, and optionally `GRAPH` if there are any. Please USE the MARKDOWN format (not JSON) with the following sections:
 

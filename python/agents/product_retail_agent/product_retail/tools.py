@@ -81,7 +81,7 @@ async def call_ds_agent(
 async def find_substitute_product(
     product_name: str,
     tool_context: ToolContext,
-) -> List[Dict]:
+):
     """
     Tool to find substitute products using Milvus Lite.
     Args:

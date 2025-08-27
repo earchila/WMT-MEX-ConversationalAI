@@ -143,6 +143,31 @@ CREATE TABLE IF NOT EXISTS `your_project_id.customer_profiles.survey_responses` 
 ```
 After running these queries, you will have an empty dataset with the defined tables. You can then populate these tables with some mock data to begin testing your agent's ability to handle multi-dataset queries.
 
+## Managing Vertex AI Code Interpreter Extensions
+
+When you run `adk web` or other `adk` commands that utilize the Vertex AI Code Interpreter, the `adk` framework may create a new Code Interpreter extension if it doesn't find an existing one to reuse. These extensions are persistent Google Cloud resources and are *not* automatically deleted when your `adk web` process stops.
+
+To avoid creating a new extension every time and to reuse an existing one, follow these steps:
+
+1.  **First Run & Capture Resource Name:**
+    Run `adk web` (or `poetry run adk web` as per the setup instructions) for the first time. In the terminal output, you will see a line similar to this:
+    ```
+    INFO - base.py:113 - Extension created. Resource name: projects/YOUR_PROJECT_NUMBER/locations/YOUR_LOCATION/extensions/YOUR_EXTENSION_ID
+    ```
+    Copy the full `Resource name` string (e.g., `projects/1234567890/locations/us-central1/extensions/9876543210`).
+
+2.  **Set `CODE_INTERPRETER_ID` Environment Variable:**
+    Open your `python/agents/data_science/.env` file (or the `.env` file specific to your agent) and add the copied resource name as the value for the `CODE_INTERPRETER_ID` environment variable:
+    ```dotenv
+    CODE_INTERPRETER_ID=projects/YOUR_PROJECT_NUMBER/locations/YOUR_LOCATION/extensions/YOUR_EXTENSION_ID
+    ```
+    Replace `projects/YOUR_PROJECT_NUMBER/locations/YOUR_LOCATION/extensions/YOUR_EXTENSION_ID` with the actual resource name you copied.
+
+3.  **Restart `adk web`:**
+    After saving the `.env` file, restart your `adk web` process. `adk` will now detect the `CODE_INTERPRETER_ID` environment variable and attempt to reuse the specified extension instead of creating a new one.
+
+By following these steps, you can manage and reuse your Vertex AI Code Interpreter extensions, preventing the creation of new ones on every run.
+
 ## Disclaimer
 
 This agent sample is provided for illustrative purposes only and is not intended for production use. It serves as a basic example of an agent and a foundational starting point for individuals or teams to develop their own agents.

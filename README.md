@@ -11,6 +11,12 @@ This repo contains ADK sample agents for both **Python** and **Java.** Navigate 
 
 To learn more, check out the [ADK Documentation](https://google.github.io/adk-docs/), and the GitHub repositories for [ADK Python](https://github.com/google/adk-python) and [ADK Java](https://github.com/google/adk-java). 
 
+## Important Environment Setup Notes
+
+When working with ADK agents, especially those interacting with Google Cloud services like Vertex AI, you might encounter situations where environment variables need to be managed carefully.
+
+*   **`CODE_INTERPRETER_ID` for Vertex AI Extensions:** If you are using Vertex AI Code Interpreter extensions, `adk` may create a new extension every time it runs if it doesn't find an existing `CODE_INTERPRETER_ID` environment variable. These extensions are persistent Google Cloud resources and are not automatically deleted. To reuse an existing extension, capture its resource name (printed in the console during creation) and set it as the `CODE_INTERPRETER_ID` in your agent's `.env` file. Refer to the specific agent's `README.md` (e.g., `python/agents/README.md` for Python agents) for detailed instructions on managing this.
+
 ## 🌳 Repository Structure
 ```bash
 ├── python

@@ -8,6 +8,7 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
+import json
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -45,7 +46,7 @@ async def call_db_agent(
         tool_context=tool_context
     )
     tool_context.state["db_agent_output"] = db_agent_output
-    return db_agent_output
+    return json.dumps(db_agent_output)
 
 
 async def call_ds_agent(

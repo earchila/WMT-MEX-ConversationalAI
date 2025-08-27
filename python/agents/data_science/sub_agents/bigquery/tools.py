@@ -231,6 +231,7 @@ OPTIONS (
             # Skip other types like MATERIALIZED_VIEW, SNAPSHOT etc.
             continue
 
+    print(f"\nDDL Statements for {dataset_id}:\n{ddl_statements}")
     return ddl_statements
 
 
@@ -258,7 +259,7 @@ You are a BigQuery SQL expert tasked with answering user's questions about BigQu
 - **Joins:** Join as few tables as possible. When joining tables, ensure all join columns are the same data type. Analyze the database and the table schema provided to understand the relationships between columns and tables.
 - **Aggregations:**  Use all non-aggregated columns from the `SELECT` statement in the `GROUP BY` clause.
 - **SQL Syntax:** Return syntactically and semantically correct SQL for BigQuery with proper relation mapping (i.e., project_id, owner, table, and column relation). Use SQL `AS` statement to assign a new name temporarily to a table column or even a table wherever needed. Always enclose subqueries and union queries in parentheses.
-- **Column Usage:** Use *ONLY* the column names (column_name) mentioned in the Table Schema. Do *NOT* use any other column names. Associate `column_name` mentioned in the Table Schema only to the `table_name` specified under Table Schema.
+- **CRITICAL: Column Usage:** You MUST use *ONLY* the column names (column_name) explicitly mentioned in the provided Table Schema. Do *NOT* invent or use any other column names. Associate `column_name` mentioned in the Table Schema only to the `table_name` specified under Table Schema.
 - **FILTERS:** You should write query effectively  to reduce and minimize the total rows to be returned. For example, you can use filters (like `WHERE`, `HAVING`, etc. (like 'COUNT', 'SUM', etc.) in the SQL query.
 - **LIMIT ROWS:**  The maximum number of rows returned should be less than {MAX_NUM_ROWS}.
 
@@ -363,8 +364,6 @@ def run_bigquery_validation(
         # 2. Remove backslashes before newlines (the key fix for this issue)
         sql_string = sql_string.replace("\\\n", "\n")  # Corrected regex
 
-        # 3. Replace escaped single quotes
-        sql_string = sql_string.replace("\\'", "'")
 
         # 4. Replace escaped newlines (those not preceded by a backslash)
         sql_string = sql_string.replace("\\n", "\n")

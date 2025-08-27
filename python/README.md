@@ -58,6 +58,8 @@ Follow these steps to set up and run the sample agents:
         the agent.
     *   Browse the folders in this repository. Each agent and tool have its own
         `README.md` file with detailed instructions.
+    * Run: poetry run adk web
+
 
 **Notes:**
 

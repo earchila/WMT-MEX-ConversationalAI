@@ -18,6 +18,7 @@ import datetime
 import logging
 import os
 import re
+from decimal import Decimal # Import Decimal
 
 import numpy as np
 import pandas as pd
@@ -397,9 +398,11 @@ def run_bigquery_validation(
             rows = [
                 {
                     key: (
-                        value
-                        if not isinstance(value, datetime.date)
+                        float(value)  # Convert Decimal to float
+                        if isinstance(value, Decimal)
                         else value.strftime("%Y-%m-%d")
+                        if isinstance(value, datetime.date)
+                        else value
                     )
                     for (key, value) in row.items()
                 }

@@ -1,217 +1,153 @@
-# Sample Agents
+# Data Science with Multiple Agents - The Look Ecommerce public data set and Customer Demographics example (Using dummy data)
 
-This folder contains sample agent samples for
-[Python Agent Development Kit](https://github.com/google/adk-python) (Python ADK).
+## Overview
 
-Each folder in this directory contains a different agent sample.
+This agent is a **multi-agent data science system** based on the **data-science** agent in available in this repo, that handles complex data analysis tasks. Its core function is to orchestrate specialized sub-agents to perform various steps in a data science pipeline, from data retrieval to machine learning.
 
-## Getting Started
+The key features of this agent are:
 
-1.  **Prerequisites:**
+* **Multi-Agent Architecture:** A top-level agent directs specialized sub-agents for different tasks, such as:
+    * **NL2SQL:** A Database Agent translates natural language into SQL to interact with BigQuery.
+    * **NL2Py:** A Data Science Agent performs data analysis and visualization using Python.
+    * **BQML:** A BQML Agent trains and evaluates machine learning models directly in BigQuery.
 
-    *   Python Agent Development Kit. See the
-        [ADK Quickstart Guide](https://google.github.io/adk-docs/get-started/quickstart/).
-    *   Python 3.9+ and [Poetry](https://python-poetry.org/docs/#installation).
-    *   Access to Google Cloud (Vertex AI) and/or a Gemini API Key (depending on
-        the agent - see individual agent READMEs).
+## This version adds the following capabilities.
 
-2.  **Running a Sample Agent:**
+* **Multi-Dataset Management:** The agent can connect to and query multiple BigQuery datasets.
+* **Contextual Inference:** The agent uses an advanced reasoning capability to determine which dataset(s) to query based on the user's natural language question, eliminating the need for the user to specify the data source.
+* **Rich Output:** It can generate both text-based responses and visual outputs like plots and graphs for data exploration and analysis.
 
-    *  Login to GCP using `gcloud auth application-default login` (This is for local testing).
-    *  Navigate to the parent directory of your agent project. For the `data-science` agent, this is `python/agents/`.
-    *  Copy the `.env.example` file to `.env` within the agent's directory (e.g., `python/agents/data_science/.env`) and fill in the required environment variables (API keys, project IDs, etc.). See the agent's specific README for details on required variables.
-    *  Install dependencies using Poetry from the `python/agents/` directory: `poetry install`
-    *  Run the agent using `adk web` within the Poetry environment.
+## 1. Single Data Set questions
+## From thelook_ecommerce dataset
 
+These questions require the agent to query only tables within the `thelook_ecommerce` public dataset. They are great for testing basic SQL functionality like `SELECT, WHERE, GROUP BY, and COUNT`.
+* **Order and Product Analysis:**
+```bash
+`"How many distinct products were sold in the last 30 days?"`
+`"What is the total revenue for each product category?"`
+`"List the top 10 most expensive products."`
+`"Find all orders that were shipped to 'New York'."`
+`"What is the average sale price of a t-shirt?"`
+```
+* **User and Traffic Analysis:**
+```bash
+`"How many new users signed up in January 2024?"`
+`"Which distribution center has the most items shipped from it?"`
+`"What is the total number of unique visitors to the website in the last week?"`
+`"Show the total number of orders placed by each customer."`
+```
+## From customer_profiles dataset
 
-## Agent Categories
+These questions focus on the newly created `customer_profiles` dataset, testing the agent's ability to query it independently.
+**Demographic Insights:**
+```bash
+``"How many customers are in each age_group?"`
+`"What is the distribution of household_income among our customers?"`
+`"List all customers who live in the 'South' region."`
+```
+**Survey and Feedback Analysis:**
+```bash
+`"What is the average satisfaction_score from all survey responses?"`
+`"Show me all the feedback text from surveys with a satisfaction_score of 1."`
+`"Count the number of survey responses for each purchase_intent category ('High', 'Medium', 'Low')."`
+`"Find the id of the user with the most recent survey submission."`
+```
 
-Check out the agent samples below, organized by category:
+## 2. Questions for Joins 🤝
 
-| Agent Name                                  | Use Case                                                                                                                              | Tag | Interaction Type | Complexity | Agent Type   | Vertical                      |
-| :------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------- | :-: | :--------------- | :--------- | :----------- | :---------------------------- |
-| [Data Science Agent](data-science) | A multi-agent system designed for sophisticated data analysis                                                                          |  Function tool (Python), Agent tool, NL2SQL, Structured data, Database   | Conversational | Advanced | Multi Agent | Horizontal                    |
-| Horizontal 
+These questions require the agent to explicitly join data from `thelook_ecommerce` and `customer_profiles` on a common key (`id`) to answer direct business questions.
+* Customer Demographics & Order Value: `"What is the average order value for customers in the 'Midwest' region, and how does it compare to the 'Northeast'?"`
+* Product Performance & Gender: `"Show me the top 5 most purchased products by customers who identify as 'Female'."`
+* Satisfaction & Purchase History: `"Create a table showing the average number of orders and average total spend for each satisfaction_score (1-5) based on customer survey data."`
+* Age Group & Refund Rate: `"Calculate the refund rate (number of refunded items / total items sold) for the '18-25' age group. How does this compare to the 56+ age group?"`
+* Income & Discount Usage: `"What percentage of orders used a discount for customers in the '$100k+' household income bracket?"`
 
+## 3. Questions for Contextual Inference 🤔
 
+These questions are more open-ended and require the agent to first infer which dataset contains the necessary information before formulating a multi-table query.
+* Popularity by Demographics: `"Which clothing category is most popular among customers with a household_income of '$50k - $100k'?"`
+* Geographic Shopping Habits: `"Do customers in the 'West' region tend to buy more clothing for 'men' or for 'women'?"`
+* Feedback & Product Type: `"Analyze customer feedback for orders of 'Activewear'. What is the average satisfaction_score for this product category?"`
+* Purchase Intent & Recency: `"Identify the top 10 customers who gave a 'High' purchase_intent score in their last survey but haven't placed an order in the last 60 days."`
+* Correlation Analysis: `"Is there a correlation between a customer's satisfaction_score and their total number of purchases?"`
 
-## Using the Agents in this Repository
+## 3. Questions for BQML Prediction 🤖
 
-This section provides general guidance on how to run, test, evaluate, and potentially deploy the agent samples found in this repository. While the core steps are similar, **each agent has its own specific requirements and detailed instructions within its dedicated `README.md` file.**
+These questions test the agent's ability to combine data from both datasets to train and analyze machine learning models using **BigQuery ML** `(BQML`).
+* Predicting Customer Lifetime Value (CLV):
+`"Using the transaction data from thelook_ecommerce and the demographic data from customer_profiles, train a BigQuery ML model to predict a customer's lifetime value. What are the most important features that influence the prediction?"`
+* Churn Prediction:
+`"Can you build a model to predict customer churn? Use customer survey data (customer_profiles.survey_responses) and purchase frequency from thelook_ecommerce to train a BQML model. Identify which factors are most predictive of a customer leaving."`
+* Predicting High-Value Customers:
+`"Using a boosted tree classifier, predict which customers are likely to become 'high-value' customers (top 20% by total spend). Combine purchasing history with their household income and region to create the training data."`
 
-**Always consult the `README.md` inside the specific agent's directory (e.g., `agents/fomc-research/README.md`) for the most accurate and detailed steps.**
+## Data Sets
+We use the **"thelook_ecommerce"** BigQuery public dataset.
 
-Here's a general workflow you can expect:
+It's a popular, publicly available dataset that's great for learning and practicing SQL, especially for e-commerce analytics. Here are some key things to know about it:
+* **Fictitious Data:** The dataset contains synthetic (not real) data for a fictional clothing e-commerce site created by the Looker team. This makes it a safe and privacy-preserving resource for analysis.
+* **Publicly Hosted on BigQuery:** Because it's a public dataset hosted on Google BigQuery, you can access and query it for free (within the free tier of BigQuery). This makes it an excellent resource for anyone with a Google Cloud account to get hands-on experience with BigQuery.
+* **Comprehensive Information:** It includes several tables with information on various aspects of an e-commerce business, such as:
+    * Customers
+    * Products
+    * Orders and Order Items
+    * Web events
+    * Digital marketing campaigns
+    * Logistics and distribution centers
 
-1.  **Choose an Agent:** Select an agent from the table above that aligns with your interests or use case.
-2.  **Navigate to the Agent Directory:** Open your terminal and change into the
-    agent's main directory from the main repo directory:
-    ```bash
-    cd python/agents/<agent-name>
-    # Example: cd python/agents/fomc-research
-    ```
-3.  **Review the Agent's README:** **This is the most crucial step.** Open the
-    `README.md` file within this directory. It will contain:
-    *   A detailed overview of the agent's purpose and architecture.
-    *   Specific prerequisites (e.g., API keys, cloud services, database setup).
-    *   Step-by-step setup and installation instructions.
-    *   Commands for running the agent locally.
-    *   Instructions for running evaluations (if applicable).
-    *   Instructions for running tests (if applicable).
-    *   Steps for deployment (if applicable).
+We also use a **customer demographics** and survey data dataset, to test your data science agent's capabilities, requiring the agent to perform joins, comparisons, and contextual inference across both.
 
-4.  **Setup and Configuration:**
-    *   **Prerequisites:** Ensure you've met the general prerequisites listed in
-        the main "Getting Started" section *and* any specific prerequisites
-        mentioned in the agent's README.
-    *   **Dependencies:** Install the agent's specific Python dependencies using
-        Poetry (this command is usually run from the agent's main directory):
-        ```bash
-        poetry install
-        ```
-    *   **Environment Variables:** Most agents require configuration via
-        environment variables. Copy the `.env.example` file to `.env` within the
-        agent's directory and populate it with your specific values (API keys,
-        project IDs, etc.). Consult the agent's README for details on required
-        variables. You may need to load these variables into your shell
-        environment (e.g., using `source .env` or `set -o allexport; . .env; set
-        +o allexport` in bash).
+**Rationale**
+An excellent additional dataset to test your data science agent's capabilities would be one that complements `the thelook_ecommerce` dataset, requiring the agent to perform joins, comparisons, and contextual inference across both. A customer demographics and survey data dataset would be a great choice.
 
-5.  **Running the Agent Locally:**
-    *   Agents can typically be run locally for testing and interaction using
-        the ADK CLI or ADK Dev UI. The specific command might vary slightly
-        (e.g., the exact directory to run from), so check the agent's README.
-        **CLI:** Often involves running `adk run .` from within the agent's
-        *core code* directory (e.g., `agents/fomc-research/fomc_research/`).
-        ```bash
-        # Example (check agent's README for exact path)
-        cd agents/fomc-research/fomc_research/
-        adk run .
-        ```
-    *   **ADK Dev UI:** Run `adk web` from the `python/agents/` directory using `poetry run`.
-        ```bash
-        # Navigate to the parent directory of your agent project
-        cd python/agents/
-        # Run adk web within the Poetry environment
-        poetry run adk web
-        ```
-        Then, open the provided URL in your browser and select the `data-science` agent from the dropdown menu.
-        **Note:** If you encounter an "address already in use" error, ensure no other `adk web` processes are running. You may need to manually terminate them (e.g., using `lsof -i :8000` to find the process ID and `kill -9 <PID>`).
+The thelook_ecommerce dataset is rich in transactional and product information, but it lacks detailed customer-specific data like age, income, household size, or feedback. By creating a second dataset with this information, you can pose questions that require the agent to:
 
-6.  **Evaluating the Agent:**
-    *   Many agents include an `eval/` directory containing scripts and data to assess performance.
-    *   The agent's README will explain how to run these evaluations (e.g.,
-        `python eval/test_eval.py`). This helps verify the agent's effectiveness
-        on specific tasks.
+* **Perform Joins:** To answer questions like "What is the average order value for customers in the 30-40 age group?", the agent would need to join the new customer demographics dataset with the thelook_ecommerce orders or order_items tables based on a shared customer ID.
+* **Contextual Inference:** Questions such as "Which product category is most popular among high-income earners?" would force the agent to infer which dataset to query for customer income information and which to query for product category data, then combine the results.
 
-7.  **Testing the Agent Components:**
-    *   A `tests/` directory often contains unit or integration tests (e.g., for custom tools).
-    *   These ensure the individual code components function correctly.
-    *   The agent's README may provide instructions on how to run these tests,
-        often using a framework like `pytest`.
+* **Advanced Analytics:** You could ask for a machine learning model (using BQML) to predict a customer's lifetime value based on their demographic information and purchasing history. This would require the agent to pull features from both datasets.
 
-8.  **Deploying the Agent:**
-    *   Some agents are designed for deployment, typically to
-        [Vertex AI Agent Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview).
-    *   The `deployment/` directory contains the necessary scripts (like
-        `deploy.py`) and configuration files.
-    *   Deployment usually requires specific Google Cloud setup (Project ID,
-        enabled APIs, permissions). The agent's README and the scripts within
-        the `deployment/` folder provide detailed instructions, similar to the
-        example shown in the `fomc-research` agent's documentation.
+## Customer Demographics Dataset
 
-By following the specific instructions in each agent's `README.md`, you can effectively set up, run, evaluate, test, and potentially deploy these diverse examples.
-
-## Directory Structure of Agents
-Each agent displayed here is organized as follows:
+* **Step 1: Create the Dataset**
+First, you need to create a new dataset to house the new tables. I'll name it customer_profiles.
 
 ```bash
-├── agent-name
-│   ├── agent_name/
-│   │   ├── shared_libraries/               # Folder contains helper functions for tools
-│   │   ├── sub_agents/                     # Folder for each sub agent
-│   │   │   │   ├── tools/                  # tools folder for the subagent
-│   │   │   │   ├── agent.py                # core logic of the sub agent
-│   │   │   │   └── prompt.py               # prompt of the subagent
-│   │   │   └── ...                         # More sub-agents
-│   │   ├── __init__.py                     # Initializes the agent
-│   │   ├── tools/                          # Contains the code for tools used by the router agent
-│   │   ├── agent.py                        # Contains the core logic of the agent
-│   │   ├── prompt.py                       # Contains the prompts for the agent
-│   ├── deployment/                         # Deployment to Agent Engine
-│   ├── eval/                               # Folder containing the evaluation method
-│   ├── tests/                              # Folder containing unit tests for tools
-│   ├── agent_pattern.png                   # Diagram of the agent pattern
-│   ├── .env.example                        # Store agent specific env variables
-│   ├── pyproject.toml                      # Project configuration
-│   └── README.md                           # Provides an overview of the agent
+CREATE SCHEMA IF NOT EXISTS `your_project_id.customer_profiles`
+OPTIONS(
+  location='US',
+  description='Dataset to store customer demographic and survey data, complementing the thelook_ecommerce dataset.'
+);
 ```
-### General Structure
+* **Step 2:Create the demographics Table**
+```bash
+CREATE TABLE IF NOT EXISTS `your_project_id.customer_profiles.demographics` (
+    user_id INT64,
+    age_group STRING,
+    household_income STRING,
+    gender STRING,
+    region STRING
+);
+```
 
-The root of each agent resides in its own directory under `agents/`. For example, the `llm-auditor` agent is located in `agents/llm-auditor/`.
+* **Step 3: Create the survey_responses Table**
+```bash
+CREATE TABLE IF NOT EXISTS `your_project_id.customer_profiles.survey_responses` (
+    survey_id INT64,
+    user_id INT64,
+    response_date TIMESTAMP,
+    satisfaction_score INT64,
+    feedback_text STRING,
+    purchase_intent STRING
+);
+```
+After running these queries, you will have an empty dataset with the defined tables. You can then populate these tables with some mock data to begin testing your agent's ability to handle multi-dataset queries.
 
+## Disclaimer
 
-#### Directory Breakdown
+This agent sample is provided for illustrative purposes only and is not intended for production use. It serves as a basic example of an agent and a foundational starting point for individuals or teams to develop their own agents.
 
-1.  **`agent_name/` (Core Agent Code)**:
-    *   This directory contains the core logic of the agent.
-    *   **`shared_libraries/`**: (Optional) Contains code that is shared among multiple sub-agents.
-    *   **`sub_agents/`**: Contains the definitions and logic for sub-agents.
-        *   Each sub-agent has its own directory (e.g., `critic/`, `reviser/` in `llm-auditor`).
-        *   **`tools/`**: Contains any custom tools specific to the sub-agent.
-        *   **`agent.py`**: Defines the sub-agent's behavior, including its model, tools, and instructions.
-        *   **`prompt.py`**: Contains the prompts used to guide the sub-agent's behavior.
-    *   **`__init__.py`**: An initialization file that imports the `agent.py` from the folder for marking the `agent_name` directory as a Python package.
-    *   **`tools/`**: Contains any custom tools used by the main agent.
-    *   **`agent.py`**: Defines the main agent's behavior, including its sub-agents, model, tools, and instructions.
-    *   **`prompt.py`**: Contains the prompts used to guide the main agent's behavior.
+This sample has not been rigorously tested, may contain bugs or limitations, and does not include features or optimizations typically required for a production environment (e.g., robust error handling, security measures, scalability, performance considerations, comprehensive logging, or advanced configuration options).
 
-    Note that the initial folder name is with "-" between words whereas the core logic is stored in the folder with the same agent name but with "_" between words (e.g., `llm_auditor`). This is due to the project structure imposed by poetry.
+Users are solely responsible for any further development, testing, security hardening, and deployment of agents based on this sample. We recommend thorough review, testing, and the implementation of appropriate safeguards before using any derived agent in a live or critical system.
 
-2.  **`deployment/`**
-
-    *   Contains scripts and files necessary for deploying the agent to a
-        platform like Vertex AI Agent Engine.
-    *   The `deploy.py` script is often found here, handling the deployment process.
-
-3.  **`eval/`**
-
-    *   Contains data and scripts for evaluating the agent's performance.
-    *   Test data (e.g., `.test.json` files) and evaluation scripts (e.g.,
-        `test_eval.py`) are typically located here.
-
-4.  **`tests/`**
-
-    *   Contains unit and integration tests for the agent.
-    *   Test files (e.g., `test_agents.py`) are used to verify the agent's functionality.
-
-5.  **`agent_pattern.png`**
-
-    *   A visual diagram illustrating the agent's architecture, including its sub-agents and their interactions.
-
-6.  **`.env.example`**
-
-    *   An example file showing the environment variables required to run the agent.
-    *   Users should copy this file to `.env` and fill in their specific values.
-
-7.  **`pyproject.toml`**
-
-    *   Contains project metadata, dependencies, and build system configuration.
-    *   Managed by Poetry for dependency management.
-
-8.  **`README.md`**
-
-    *   Provides detailed documentation specific to the agent, including its purpose, setup instructions, usage examples, and customization options.
-
-## Example: `llm-auditor`
-
-The `llm-auditor` agent demonstrates this structure effectively. It has:
-
-*   A core `llm_auditor/` directory.
-*   Sub-agents in `llm_auditor/sub_agents/`, such as `critic/` and `reviser/`.
-*   Deployment scripts in `deployment/`.
-*   Evaluation data and scripts in `eval/`.
-*   Tests in `tests/`.
-*   An `.env.example` file.
-*   A `pyproject.toml` file.
-*   A `README.md` file.

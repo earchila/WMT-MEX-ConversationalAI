@@ -45,19 +45,19 @@ def _serialize_value_for_sql(value):
         return "NULL"
     if isinstance(value, str):
         # Escape single quotes and backslashes for SQL strings.
-        return f"'{value.replace('\\', '\\\\').replace("'", "''")}'"
+        return "'{}'".format(value.replace('\\', '\\\\').replace('\'', '\'\''))
     if isinstance(value, bytes):
-        return f"b'{value.decode('utf-8', 'replace').replace('\\', '\\\\').replace("'", "''")}'"
+        return "b'{}'".format(value.decode('utf-8', 'replace').replace('\\', '\\\\').replace('\'', '\'\''))
     if isinstance(value, (datetime.datetime, datetime.date, pd.Timestamp)):
         # Timestamps and datetimes need to be quoted.
-        return f"'{value}'"
+        return "'{}'".format(value)
     if isinstance(value, (list, np.ndarray)):
         # Format arrays.
-        return f"[{', '.join(_serialize_value_for_sql(v) for v in value)}]"
+        return "[{}]".format(', '.join(_serialize_value_for_sql(v) for v in value))
     if isinstance(value, dict):
         # For STRUCT, BQ expects ('val1', 'val2', ...).
         # The values() order from the dataframe should match the column order.
-        return f"({', '.join(_serialize_value_for_sql(v) for v in value.values())})"
+        return "({})".format(', '.join(_serialize_value_for_sql(v) for v in value.values()))
     return str(value)
 
 
@@ -194,13 +194,14 @@ OPTIONS (
                     # Use OPTIONS for column descriptions
                     col_def += (
                         " OPTIONS(description='"
-                        f"{field.description.replace("'", "''")}')"
+                        "{}".format(field.description.replace('\'', '\'\'')) + "')"
                     )
                 column_defs.append(col_def)
 
             ddl_statement = (
-                f"CREATE OR REPLACE TABLE `{table_ref}` "
-                f"(\n{',\n'.join(column_defs)}\n);\n\n"
+                "CREATE OR REPLACE TABLE `{}` (\n{}\n);\n\n".format(
+                    table_ref, ",\n".join(column_defs)
+                )
             )
 
             # Add example values if available by running a query. This is more
@@ -210,13 +211,13 @@ OPTIONS (
                 rows = client.query(sample_query).to_dataframe()
 
                 if not rows.empty:
-                    ddl_statement += f"-- Example values for table `{table_ref}`:\n"
+                    ddl_statement += "-- Example values for table `{}`:\n".format(table_ref)
                     for _, row in rows.iterrows():
                         values_str = ", ".join(
                             _serialize_value_for_sql(v) for v in row.values
                         )
                         ddl_statement += (
-                            f"INSERT INTO `{table_ref}` VALUES ({values_str});\n\n"
+                            "INSERT INTO `{}` VALUES ({});\n\n".format(table_ref, values_str)
                         )
             except Exception as e:
                 logging.warning(

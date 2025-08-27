@@ -17,13 +17,11 @@ Each folder in this directory contains a different agent sample.
 
 2.  **Running a Sample Agent:**
 
-    *   Navigate to the specific agent's directory (e.g., `cd agents/llm-auditor`).
-    *    Copy the `.env.example` file to `.env` and fill in the required
-         environment variables (API keys, project IDs, etc.). See the agent's
-         specific README for details on required variables.
-    *   Install dependencies using Poetry: `poetry install`
-    *   Follow the instructions in the agent's `README.md` to run it (e.g.,
-        using `adk run .` or `adk web`).
+    *  Login to GCP using `gcloud auth application-default login` (This is for local testing).
+    *  Navigate to the parent directory of your agent project. For the `data-science` agent, this is `python/agents/`.
+    *  Copy the `.env.example` file to `.env` within the agent's directory (e.g., `python/agents/data_science/.env`) and fill in the required environment variables (API keys, project IDs, etc.). See the agent's specific README for details on required variables.
+    *  Install dependencies using Poetry from the `python/agents/` directory: `poetry install`
+    *  Run the agent using `adk web` within the Poetry environment.
 
 
 ## Agent Categories
@@ -90,14 +88,15 @@ Here's a general workflow you can expect:
         cd agents/fomc-research/fomc_research/
         adk run .
         ```
-    *   **ADK Dev UI:** Often involves running `adk web .` from the agent's
-        *main* directory (e.g., `agents/fomc-research/`).
+    *   **ADK Dev UI:** Run `adk web` from the `python/agents/` directory using `poetry run`.
         ```bash
-        # Example (check agent's README for exact path)
-        cd agents/fomc-research/
-        adk web
+        # Navigate to the parent directory of your agent project
+        cd python/agents/
+        # Run adk web within the Poetry environment
+        poetry run adk web
         ```
-        Then, open the provided URL in your browser and select the agent from the dropdown menu.
+        Then, open the provided URL in your browser and select the `data-science` agent from the dropdown menu.
+        **Note:** If you encounter an "address already in use" error, ensure no other `adk web` processes are running. You may need to manually terminate them (e.g., using `lsof -i :8000` to find the process ID and `kill -9 <PID>`).
 
 6.  **Evaluating the Agent:**
     *   Many agents include an `eval/` directory containing scripts and data to assess performance.

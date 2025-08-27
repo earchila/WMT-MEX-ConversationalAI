@@ -16,7 +16,6 @@ To learn more, check out the [ADK Documentation](https://google.github.io/adk-do
 ├── python
 │   ├── agents
 │   │   ├── data_science_v2
-│   │   ├── data-science
 │   └── README.md
 └── README.md
 ```

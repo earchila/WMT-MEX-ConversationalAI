@@ -1,4 +1,4 @@
-# Data Science with Multiple Agents - The Look Ecommerce public data set and Customer Demographics example (Using dummy data)
+# Data Science with Multiple Agents
 
 ## Overview
 

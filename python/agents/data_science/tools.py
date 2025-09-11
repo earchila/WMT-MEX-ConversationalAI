@@ -58,7 +58,7 @@ async def call_ds_agent(
     if question == "N/A":
         return tool_context.state["db_agent_output"]
 
-    input_data = tool_context.state["query_result"]
+    input_data = tool_context.state["db_agent_output"]
 
     question_with_data = f"""
   Question to answer: {question}

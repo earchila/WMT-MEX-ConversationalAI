@@ -22,7 +22,7 @@ import json
 from google.adk.tools import ToolContext
 from google.adk.tools.agent_tool import AgentTool
 
-from .sub_agents import ds_agent, db_agent
+from .sub_agents import ds_agent, db_agent, bqml_agent
 
 
 async def call_db_agent(
@@ -75,3 +75,16 @@ async def call_ds_agent(
     )
     tool_context.state["ds_agent_output"] = ds_agent_output
     return ds_agent_output
+
+
+async def call_bqml_agent(
+    question: str,
+    tool_context: ToolContext,
+):
+    """Tool to call BQML agent."""
+    agent_tool = AgentTool(agent=bqml_agent)
+    bqml_agent_output = await agent_tool.run_async(
+        args={"request": question}, tool_context=tool_context
+    )
+    tool_context.state["bqml_agent_output"] = bqml_agent_output
+    return bqml_agent_output

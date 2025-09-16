@@ -31,7 +31,7 @@ from .sub_agents.bigquery.tools import (
     get_database_settings as get_bq_database_settings,
 )
 from .prompts import return_instructions_root
-from .tools import call_db_agent, call_ds_agent
+from .tools import call_db_agent, call_ds_agent, call_bqml_agent
 
 date_today = date.today()
 
@@ -78,6 +78,7 @@ root_agent = Agent(
     tools=[
         call_db_agent,
         call_ds_agent,
+        call_bqml_agent,
         load_artifacts,
     ],
     before_agent_callback=setup_before_agent_call,
